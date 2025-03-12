@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -49,27 +48,6 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/20 rounded-full;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/30;
-  }
-}
-
-@layer components {
-  /* Number input styling */
   input[type="number"] {
     -moz-appearance: textfield;
   }
@@ -79,71 +57,26 @@
     -webkit-appearance: none;
     margin: 0;
   }
+}
 
-  /* Custom focus outline */
-  .focus-ring {
-    @apply outline-none ring-2 ring-primary/30 ring-offset-2 ring-offset-background transition-all duration-200;
-  }
-
+@layer components {
   .calculator-container {
-    @apply max-w-screen-md mx-auto w-full;
-    perspective: 1000px;
+    @apply max-w-3xl mx-auto w-full;
   }
 
   .calculator-content {
-    @apply rounded-[1.5rem] bg-white backdrop-blur-sm border border-black/5 shadow-lg transition-all duration-500;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
+    @apply rounded-xl bg-white shadow-sm border border-border/40;
   }
 
-  .service-item {
-    @apply border-b border-black/5 px-6 py-5 transition-all duration-200 ease-out relative;
+  .btn-insolation {
+    @apply px-4 py-2 rounded-md transition-colors;
   }
 
-  .service-item:hover {
-    @apply bg-secondary/50;
+  .btn-insolation.active {
+    @apply bg-[#1886BD] text-white;
   }
 
-  .service-item:last-child {
-    @apply border-b-0;
-  }
-
-  .quantity-input {
-    @apply relative rounded-full bg-background border border-black/10 px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/30 transition-all duration-200;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .total-section {
-    @apply sticky bottom-0 bg-white/80 backdrop-blur-md border-t border-black/5 rounded-b-[1.5rem];
-    box-shadow: 0 -10px 15px -3px rgba(0, 0, 0, 0.02), 0 -4px 6px -2px rgba(0, 0, 0, 0.01);
-  }
-
-  .service-price {
-    @apply font-medium text-foreground/80;
-  }
-
-  .service-total {
-    @apply font-medium text-foreground transition-all duration-300;
-  }
-
-  .input-wrapper {
-    @apply relative inline-flex items-center;
-  }
-
-  .input-control {
-    @apply absolute right-0 top-0 bottom-0 w-6 flex flex-col;
-  }
-
-  .input-button {
-    @apply bg-transparent text-xs text-muted-foreground/70 hover:text-primary flex-1 flex items-center justify-center focus:outline-none;
-  }
-
-  /* Bitrix-specific classes to help integrate with 1C-Bitrix */
-  .bitrix-calculator {
-    @apply w-full;
-  }
-  
-  .bitrix-data-container {
-    @apply hidden;
+  .btn-insolation:not(.active) {
+    @apply bg-gray-100 hover:bg-gray-200;
   }
 }
