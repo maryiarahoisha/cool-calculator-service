@@ -8,7 +8,24 @@ interface Quantities {
   [key: number]: number;
 }
 
-const ServiceCalculator: React.FC = () => {
+// Interface for Bitrix integration
+interface BitrixIntegrationProps {
+  onCalculationComplete?: (data: {
+    totalAmount: number;
+    selectedServices: Array<{id: number; name: string; quantity: number; price: number; total: number}>
+  }) => void;
+  currency?: string;
+  serviceData?: Service[];
+}
+
+const ServiceCalculator: React.FC<BitrixIntegrationProps> = ({ 
+  onCalculationComplete,
+  currency = "BYN",
+  serviceData
+}) => {
+  // Use external service data if provided (for Bitrix CMS integration)
+  const calculatorServices = serviceData || services;
+  
   const [quantities, setQuantities] = useState<Quantities>({});
   const [totalAmount, setTotalAmount] = useState(0);
   const [showTotalAnimation, setShowTotalAnimation] = useState(false);
@@ -20,10 +37,21 @@ const ServiceCalculator: React.FC = () => {
   // Calculate total amount when quantities change
   useEffect(() => {
     let newTotal = 0;
+    const selectedServices: Array<{id: number; name: string; quantity: number; price: number; total: number}> = [];
+    
     Object.entries(quantities).forEach(([id, quantity]) => {
-      const service = services.find(s => s.id === parseInt(id));
+      const service = calculatorServices.find(s => s.id === parseInt(id));
       if (service && quantity > 0) {
-        newTotal += service.price * quantity;
+        const serviceTotal = service.price * quantity;
+        newTotal += serviceTotal;
+        
+        selectedServices.push({
+          id: service.id,
+          name: service.name,
+          quantity: quantity,
+          price: service.price,
+          total: serviceTotal
+        });
       }
     });
 
@@ -37,10 +65,31 @@ const ServiceCalculator: React.FC = () => {
     setTotalAmount(newTotal);
     prevTotalRef.current = newTotal;
     
+    // Call Bitrix callback if provided
+    if (onCalculationComplete) {
+      onCalculationComplete({
+        totalAmount: newTotal,
+        selectedServices
+      });
+    }
+    
+    // For Bitrix form integration - update hidden fields if they exist
+    if (typeof window !== 'undefined') {
+      const totalField = document.getElementById('bitrix_total_amount') as HTMLInputElement;
+      if (totalField) {
+        totalField.value = newTotal.toString();
+      }
+      
+      const servicesField = document.getElementById('bitrix_selected_services') as HTMLInputElement;
+      if (servicesField) {
+        servicesField.value = JSON.stringify(selectedServices);
+      }
+    }
+    
     if (isInitialLoad) {
       setIsInitialLoad(false);
     }
-  }, [quantities, isInitialLoad]);
+  }, [quantities, isInitialLoad, calculatorServices, onCalculationComplete]);
 
   const handleQuantityChange = (id: number, quantity: number) => {
     setQuantities(prev => ({
@@ -50,17 +99,17 @@ const ServiceCalculator: React.FC = () => {
   };
 
   const getServicesByCategory = () => {
-    const installationServices = services.filter(s => 
+    const installationServices = calculatorServices.filter(s => 
       s.name.toLowerCase().includes('монтаж') || 
       s.name.toLowerCase().includes('установка')
     );
     
-    const maintenanceServices = services.filter(s => 
+    const maintenanceServices = calculatorServices.filter(s => 
       s.name.toLowerCase().includes('обслуживание') || 
       s.name.toLowerCase().includes('выезд')
     );
     
-    const constructionServices = services.filter(s => 
+    const constructionServices = calculatorServices.filter(s => 
       s.name.toLowerCase().includes('штробление') || 
       s.name.toLowerCase().includes('бурение') || 
       s.name.toLowerCase().includes('трасса') || 
@@ -68,7 +117,7 @@ const ServiceCalculator: React.FC = () => {
       s.name.toLowerCase().includes('короб')
     );
     
-    const otherServices = services.filter(s => 
+    const otherServices = calculatorServices.filter(s => 
       !installationServices.includes(s) && 
       !maintenanceServices.includes(s) && 
       !constructionServices.includes(s)
@@ -106,6 +155,7 @@ const ServiceCalculator: React.FC = () => {
             service={service}
             quantity={quantities[service.id] || 0}
             onChange={handleQuantityChange}
+            currency={currency}
           />
         ))}
       </div>
@@ -113,13 +163,19 @@ const ServiceCalculator: React.FC = () => {
   );
 
   const formatPrice = (price: number) => {
-    return price.toLocaleString('ru-RU');
+    return price.toLocaleString('ru-BY');
   };
 
   const hasSelectedServices = Object.values(quantities).some(q => q > 0);
 
   return (
-    <div className="calculator-container p-4 sm:p-6 animate-fade-in">
+    <div className="calculator-container p-4 sm:p-6 animate-fade-in bitrix-calculator">
+      {/* Hidden fields for Bitrix form integration */}
+      <div className="bitrix-data-container">
+        <input type="hidden" id="bitrix_total_amount" name="TOTAL_AMOUNT" value={totalAmount.toString()} />
+        <input type="hidden" id="bitrix_selected_services" name="SELECTED_SERVICES" value="" />
+      </div>
+      
       <div className="calculator-content animate-scale-in">
         <div 
           ref={headerRef}
@@ -179,7 +235,7 @@ const ServiceCalculator: React.FC = () => {
                   showTotalAnimation && "text-primary",
                   hasSelectedServices ? "text-3xl" : "text-2xl"
                 )}>
-                  {formatPrice(totalAmount)} ₽
+                  {formatPrice(totalAmount)} {currency}
                 </div>
               </div>
               

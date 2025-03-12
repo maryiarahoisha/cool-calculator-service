@@ -8,9 +8,15 @@ interface ServiceItemProps {
   service: Service;
   quantity: number;
   onChange: (id: number, quantity: number) => void;
+  currency?: string;
 }
 
-const ServiceItem: React.FC<ServiceItemProps> = ({ service, quantity, onChange }) => {
+const ServiceItem: React.FC<ServiceItemProps> = ({ 
+  service, 
+  quantity, 
+  onChange,
+  currency = 'BYN'
+}) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [animateTotal, setAnimateTotal] = useState(false);
@@ -42,12 +48,18 @@ const ServiceItem: React.FC<ServiceItemProps> = ({ service, quantity, onChange }
       onChange(service.id, quantity - 1);
     }
   };
+  
+  // Format price according to Belarusian locale
+  const formatPrice = (price: number) => {
+    return price.toLocaleString('ru-BY');
+  };
 
   return (
     <div 
       className="service-item"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      data-service-id={service.id} // For Bitrix integration
     >
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         <div className="flex-1">
@@ -59,7 +71,7 @@ const ServiceItem: React.FC<ServiceItemProps> = ({ service, quantity, onChange }
         
         <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6">
           <div className="service-price whitespace-nowrap">
-            {service.price} ₽/{service.unit}
+            {formatPrice(service.price)} {currency}/{service.unit}
           </div>
           
           <div className="flex items-center gap-4 sm:min-w-[180px] justify-end">
@@ -78,6 +90,8 @@ const ServiceItem: React.FC<ServiceItemProps> = ({ service, quantity, onChange }
                   isFocused && "border-primary/40 ring-2 ring-primary/20",
                   quantity > 0 && "bg-primary/5 border-primary/20"
                 )}
+                name={`service_quantity_${service.id}`} // For Bitrix form integration
+                data-price={service.price} // For Bitrix JS integration
               />
               
               {(isHovered || isFocused) && (
@@ -86,6 +100,7 @@ const ServiceItem: React.FC<ServiceItemProps> = ({ service, quantity, onChange }
                     onClick={incrementQuantity}
                     className="input-button rounded-tr-full"
                     aria-label="Увеличить"
+                    type="button"
                   >
                     <ChevronUp size={12} />
                   </button>
@@ -93,6 +108,7 @@ const ServiceItem: React.FC<ServiceItemProps> = ({ service, quantity, onChange }
                     onClick={decrementQuantity}
                     className="input-button rounded-br-full"
                     aria-label="Уменьшить"
+                    type="button"
                   >
                     <ChevronDown size={12} />
                   </button>
@@ -106,8 +122,9 @@ const ServiceItem: React.FC<ServiceItemProps> = ({ service, quantity, onChange }
                 animateTotal && "animate-pulse-subtle text-primary",
                 quantity > 0 ? "opacity-100" : "opacity-50"
               )}
+              data-total={totalPrice} // For Bitrix JS integration
             >
-              {totalPrice.toLocaleString('ru-RU')} ₽
+              {formatPrice(totalPrice)} {currency}
             </div>
           </div>
         </div>

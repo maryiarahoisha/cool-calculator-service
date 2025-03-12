@@ -2,6 +2,19 @@
 import React, { useEffect } from 'react';
 import ServiceCalculator from '@/components/ServiceCalculator';
 
+// Interface for 1C-Bitrix global object
+interface BitrixGlobal {
+  initialized?: boolean;
+  onCalculate?: (data: any) => void;
+}
+
+// Declare global Bitrix object for TypeScript
+declare global {
+  interface Window {
+    BX?: BitrixGlobal;
+  }
+}
+
 const Index = () => {
   // Apply smooth scroll behavior
   useEffect(() => {
@@ -10,6 +23,29 @@ const Index = () => {
       document.documentElement.style.scrollBehavior = 'auto';
     };
   }, []);
+
+  // Load Bitrix scripts if needed
+  useEffect(() => {
+    // This function would only execute if the app is embedded in a Bitrix environment
+    const loadBitrixIntegration = () => {
+      if (window.BX && !window.BX.initialized) {
+        console.log('Bitrix integration initialized');
+        window.BX.initialized = true;
+      }
+    };
+
+    // Check if we're in a Bitrix environment
+    if (typeof window !== 'undefined' && window.BX) {
+      loadBitrixIntegration();
+    }
+  }, []);
+
+  // Handler for when calculation is complete (for Bitrix integration)
+  const handleCalculationComplete = (data: any) => {
+    if (window.BX && window.BX.onCalculate) {
+      window.BX.onCalculate(data);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-accent/30 pb-12">
@@ -27,12 +63,12 @@ const Index = () => {
       </header>
 
       <main className="w-full max-w-screen-lg mx-auto">
-        <ServiceCalculator />
+        <ServiceCalculator onCalculationComplete={handleCalculationComplete} currency="BYN" />
       </main>
 
       <footer className="w-full max-w-screen-lg mx-auto mt-12 px-4 text-center">
         <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Калькулятор услуг кондиционирования
+          © {new Date().getFullYear()} Калькулятор услуг кондиционирования | Все цены указаны в BYN
         </p>
       </footer>
     </div>
