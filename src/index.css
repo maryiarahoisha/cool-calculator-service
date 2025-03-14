@@ -96,6 +96,63 @@
     backface-visibility: hidden;
   }
 
+  /* New styles for modern calculator matching the screenshot */
+  .calculator-section {
+    @apply bg-white border border-gray-200 rounded-lg mb-4 p-6;
+  }
+
+  .calculator-header {
+    @apply text-3xl font-medium text-left mb-8 mt-2;
+  }
+
+  .calculator-field-group {
+    @apply flex flex-col md:flex-row gap-4 mb-6;
+  }
+
+  .calculator-field {
+    @apply flex-1;
+  }
+
+  .calculator-label {
+    @apply block text-gray-600 mb-2 text-sm;
+  }
+
+  .calculator-input {
+    @apply w-full h-12 px-4 border border-gray-300 rounded-md focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none;
+  }
+
+  .insolation-buttons {
+    @apply flex flex-wrap gap-2 mt-1;
+  }
+
+  .insolation-button {
+    @apply h-10 px-4 rounded-md border border-gray-300 text-gray-700 font-medium transition-all;
+  }
+
+  .insolation-button-active {
+    @apply bg-primary text-white border-primary;
+  }
+
+  .section-divider {
+    @apply my-6 border-t border-gray-200;
+  }
+
+  .switch-field {
+    @apply flex items-center gap-3;
+  }
+
+  .submit-button {
+    @apply bg-primary hover:bg-primary/90 text-white font-medium h-12 px-6 rounded-md transition-all;
+  }
+
+  .result-value {
+    @apply text-4xl font-bold;
+  }
+
+  .result-label {
+    @apply text-gray-500 text-sm;
+  }
+
   .service-item {
     @apply border-b border-black/5 px-6 py-5 transition-all duration-200 ease-out relative;
   }

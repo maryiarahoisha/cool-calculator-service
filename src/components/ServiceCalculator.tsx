@@ -3,6 +3,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { services, Service } from '@/data/services';
 import ServiceItem from './ServiceItem';
 import { cn } from '@/lib/utils';
+import { Input } from './ui/input';
+import { Switch } from './ui/switch';
+import { Button } from './ui/button';
 
 interface Quantities {
   [key: number]: number;
@@ -143,8 +146,8 @@ const ServiceCalculator: React.FC<BitrixIntegrationProps> = ({
     title: string, 
     description: string
   ) => (
-    <div className="mb-4">
-      <div className="px-6 pt-4 pb-2">
+    <div className="calculator-section">
+      <div className="px-2 mb-4">
         <h2 className="text-lg font-semibold text-foreground">{title}</h2>
         <p className="text-sm text-muted-foreground">{description}</p>
       </div>
@@ -184,10 +187,10 @@ const ServiceCalculator: React.FC<BitrixIntegrationProps> = ({
           <div className="inline-block bg-primary/10 text-primary rounded-full px-3 py-1 text-xs font-medium mb-2">
             Калькулятор услуг
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+          <h1 className="calculator-header">
             Расчет стоимости установки кондиционеров
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-muted-foreground mb-4">
             Выберите необходимые услуги и их количество для расчета
           </p>
         </div>
@@ -231,9 +234,8 @@ const ServiceCalculator: React.FC<BitrixIntegrationProps> = ({
               <div>
                 <div className="text-sm text-muted-foreground mb-1">Итоговая стоимость</div>
                 <div className={cn(
-                  "text-2xl font-bold transition-all duration-300",
+                  "result-value transition-all duration-300",
                   showTotalAnimation && "text-primary",
-                  hasSelectedServices ? "text-3xl" : "text-2xl"
                 )}>
                   {formatPrice(totalAmount)} {currency}
                 </div>
