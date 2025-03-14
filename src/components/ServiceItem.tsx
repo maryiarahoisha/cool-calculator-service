@@ -56,7 +56,7 @@ const ServiceItem: React.FC<ServiceItemProps> = ({
 
   return (
     <div 
-      className="service-item"
+      className="service-item p-4"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       data-service-id={service.id} // For Bitrix integration
@@ -75,7 +75,7 @@ const ServiceItem: React.FC<ServiceItemProps> = ({
           </div>
           
           <div className="flex items-center gap-4 sm:min-w-[180px] justify-end">
-            <div className="input-wrapper">
+            <div className="input-wrapper relative">
               <input
                 ref={inputRef}
                 type="number"

@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -6,30 +7,35 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 203 75% 42%;  /* Changed to #1886BD */
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
-
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
-
-    --accent: 210 40% 94%;
-    --accent-foreground: 222 47% 11%;
-
-    --destructive: 0 84% 60%;
+    /* Main color scheme - blue */
+    --primary: 203 75% 42%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Light gray as secondary */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    
+    /* Red for destructive actions */
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-
+    
+    /* Gray for muted elements */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    
+    /* Very light blue for accent */
+    --accent: 203 75% 97%; 
+    --accent-foreground: 222.2 47.4% 11.2%;
+    
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 203 75% 42%;  /* Changed to match primary #1886BD */
@@ -39,54 +45,51 @@
 
   * {
     @apply border-border;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
-
+  
   body {
-    @apply bg-background text-foreground font-sans selection:bg-primary/20;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    @apply bg-background text-foreground min-h-screen;
   }
-
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/20 rounded-full;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/30;
+  
+  button {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
 @layer components {
-  /* Number input styling */
-  input[type="number"] {
-    -moz-appearance: textfield;
+  .service-item {
+    @apply py-4 px-6 hover:bg-accent/30 transition-colors duration-200;
+    position: relative;
   }
   
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  .service-item:hover .service-title {
+    @apply text-primary;
   }
-
-  /* Custom focus outline */
-  .focus-ring {
-    @apply outline-none ring-2 ring-primary/30 ring-offset-2 ring-offset-background transition-all duration-200;
+  
+  .input-wrapper {
+    position: relative;
+    display: inline-block;
   }
-
-  .calculator-container {
-    @apply max-w-screen-md mx-auto w-full;
-    perspective: 1000px;
+  
+  .input-control {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .input-button {
+    @apply bg-primary/10 hover:bg-primary/20 text-primary flex items-center justify-center transition-colors;
+    height: 50%;
+    width: 20px;
+  }
+  
+  .input-button:active {
+    @apply bg-primary/30;
   }
 
   .calculator-content {
@@ -94,17 +97,16 @@
     transform-style: preserve-3d;
     backface-visibility: hidden;
   }
-
-  .service-item {
-    @apply border-b border-black/5 px-6 py-5 transition-all duration-200 ease-out relative;
+  
+  .calculator-container {
+    max-width: 800px;
+    margin: 0 auto;
   }
-
-  .service-item:hover {
-    @apply bg-secondary/50;
-  }
-
-  .service-item:last-child {
-    @apply border-b-0;
+  
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 
   .quantity-input {
@@ -117,32 +119,7 @@
     box-shadow: 0 -10px 15px -3px rgba(0, 0, 0, 0.02), 0 -4px 6px -2px rgba(0, 0, 0, 0.01);
   }
 
-  .service-price {
-    @apply font-medium text-foreground/80;
-  }
-
-  .service-total {
-    @apply font-medium text-foreground transition-all duration-300;
-  }
-
-  .input-wrapper {
-    @apply relative inline-flex items-center;
-  }
-
-  .input-control {
-    @apply absolute right-0 top-0 bottom-0 w-6 flex flex-col;
-  }
-
-  .input-button {
-    @apply bg-transparent text-xs text-muted-foreground/70 hover:text-primary flex-1 flex items-center justify-center focus:outline-none;
-  }
-
-  /* Bitrix-specific classes to help integrate with 1C-Bitrix */
-  .bitrix-calculator {
-    @apply w-full;
-  }
-  
-  .bitrix-data-container {
-    @apply hidden;
+  html.dark .total-section {
+    @apply bg-background/80;
   }
 }
