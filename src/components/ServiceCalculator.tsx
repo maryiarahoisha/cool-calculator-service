@@ -179,9 +179,9 @@ const ServiceCalculator: React.FC<BitrixIntegrationProps> = ({
       <div className="calculator-content animate-scale-in">
         <div 
           ref={headerRef}
-          className="sticky top-0 z-10 bg-gradient-to-b from-white via-white to-white/80 backdrop-blur-sm pt-6 pb-4 px-6 rounded-t-[1.5rem]"
+          className="sticky top-0 z-10 bg-gradient-to-b from-white via-white to-white/80 backdrop-blur-sm pt-6 pb-4 px-6 rounded-t-md"
         >
-          <div className="inline-block bg-primary/10 text-primary rounded-full px-3 py-1 text-xs font-medium mb-2">
+          <div className="inline-block bg-primary/10 text-primary rounded-md px-3 py-1 text-xs font-medium mb-2">
             Калькулятор услуг
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
@@ -240,7 +240,7 @@ const ServiceCalculator: React.FC<BitrixIntegrationProps> = ({
               </div>
               
               {hasSelectedServices && (
-                <div className="p-3 bg-primary/10 rounded-lg text-primary text-sm font-medium animate-fade-in">
+                <div className="p-3 bg-primary/10 rounded-md text-primary text-sm font-medium animate-fade-in">
                   {Object.values(quantities).filter(q => q > 0).length} {' '}
                   {Object.values(quantities).filter(q => q > 0).length === 1 
                     ? 'услуга' 

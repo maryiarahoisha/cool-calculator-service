@@ -86,7 +86,7 @@ const ServiceItem: React.FC<ServiceItemProps> = ({
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 className={cn(
-                  "quantity-input w-[4.5rem] text-center",
+                  "quantity-input w-[4.5rem] text-center rounded-md",
                   isFocused && "border-primary/40 ring-2 ring-primary/20",
                   quantity > 0 && "bg-primary/5 border-primary/20"
                 )}
@@ -98,7 +98,7 @@ const ServiceItem: React.FC<ServiceItemProps> = ({
                 <span className="input-control">
                   <button 
                     onClick={incrementQuantity}
-                    className="input-button rounded-tr-full"
+                    className="input-button rounded-tr-md"
                     aria-label="Увеличить"
                     type="button"
                   >
@@ -106,7 +106,7 @@ const ServiceItem: React.FC<ServiceItemProps> = ({
                   </button>
                   <button 
                     onClick={decrementQuantity}
-                    className="input-button rounded-br-full"
+                    className="input-button rounded-br-md"
                     aria-label="Уменьшить"
                     type="button"
                   >
